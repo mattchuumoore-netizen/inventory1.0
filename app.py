@@ -11,11 +11,8 @@ st.markdown(
 
 # Sidebar for global default configurations
 st.sidebar.header("⚙️ Default Settings")
-default_face_cap = st.sidebar.number_input(
-    "Face Resin Tank Capacity (cu. ft)", value=2.5
-)
-default_face_dens = st.sidebar.number_input(
-    "Face Resin Density (lbs/cu. ft)", value=50.0
+st.sidebar.markdown(
+    "**Face Resin Specs:** 228 in height | 496 lbs/in (Total: 113,108 lbs/tank)"
 )
 
 default_core_cap = st.sidebar.number_input(
@@ -32,13 +29,9 @@ default_scav_dens = st.sidebar.number_input(
     "Scavenger Density (lbs/cu. ft)", value=45.0
 )
 
-default_wax_cap = st.sidebar.number_input(
-    "Wax Tank Capacity (cu. ft)", value=1.5
-)
+default_wax_cap = st.sidebar.number_input("Wax Tank Capacity (cu. ft)", value=1.5)
 default_wax_dens = st.sidebar.number_input(
     "Wax Density (lbs/cu. ft)", value=35.0
-
-
 )
 
 
@@ -66,9 +59,11 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
 weights = {}
 percentages = {}
 
-# --- 1. FACE RESIN ---
+# --- 1. FACE RESIN (New 228" height @ 496 lbs/in) ---
+FACE_MAX_LBS_PER_TANK = 228 * 496  # 113,108 lbs total per tank
+
 with tab1:
-    st.subheader("Face Resin Tanks (4 Units)")
+    st.subheader("Face Resin Tanks (4 Units - 228\" Height)")
     cols = st.columns(4)
     for i in range(1, 5):
         with cols[i - 1]:
@@ -81,7 +76,9 @@ with tab1:
                 label_visibility="visible",
             )
             percentages[f"Face Tank {i}"] = p
-            wt = (p / 100.0) * default_face_cap * default_face_dens
+            # Calculate height in inches based on percentage, then multiply by lbs/inch
+            inches_filled = (p / 100.0) * 228
+            wt = inches_filled * 496
             weights[f"Face Tank {i}"] = wt
             render_tank_card(f"Tank F{i}", p, wt, color="#3498db")
 
@@ -139,7 +136,9 @@ with tab4:
             percentages[f"Wax Tank {i}"] = p
             wt = (p / 100.0) * default_wax_cap * default_wax_dens
             weights[f"Wax Tank {i}"] = wt
-            render_tank_card(f"Tank W{i}", p, wt, color="#9b59b6")
+            render_tank_v = render_tank_card(
+                f"Tank W{i}", p, wt, color="#9b59b6"
+            )
 
 # --- 5. SUMMARY ---
 with tab5:
