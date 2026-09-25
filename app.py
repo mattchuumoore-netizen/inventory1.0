@@ -9,17 +9,10 @@ st.markdown(
     "Adjust fill percentages to instantly view calculated weights and dynamic tank levels."
 )
 
-# Sidebar for global default configurations
+# Sidebar for global configurations
 st.sidebar.header("⚙️ Default Settings")
 st.sidebar.markdown(
-    "**Face Resin Specs:** 228 in height | 496 lbs/in (Total: 113,108 lbs/tank)"
-)
-
-default_core_cap = st.sidebar.number_input(
-    "Core Resin Tank Capacity (cu. ft)", value=3.0
-)
-default_core_dens = st.sidebar.number_input(
-    "Core Resin Density (lbs/cu. ft)", value=52.0
+    "**Face Resin:** 228 in height | 496 lbs/in\n\n**Core Resin:** 228 in height | 1,000 lbs/in"
 )
 
 default_scav_cap = st.sidebar.number_input(
@@ -59,9 +52,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
 weights = {}
 percentages = {}
 
-# --- 1. FACE RESIN (New 228" height @ 496 lbs/in) ---
-FACE_MAX_LBS_PER_TANK = 228 * 496  # 113,108 lbs total per tank
-
+# --- 1. FACE RESIN (228" height @ 496 lbs/in) ---
 with tab1:
     st.subheader("Face Resin Tanks (4 Units - 228\" Height)")
     cols = st.columns(4)
@@ -76,15 +67,14 @@ with tab1:
                 label_visibility="visible",
             )
             percentages[f"Face Tank {i}"] = p
-            # Calculate height in inches based on percentage, then multiply by lbs/inch
             inches_filled = (p / 100.0) * 228
             wt = inches_filled * 496
             weights[f"Face Tank {i}"] = wt
             render_tank_card(f"Tank F{i}", p, wt, color="#3498db")
 
-# --- 2. CORE RESIN ---
+# --- 2. CORE RESIN (Fixed: 228" height @ 1,000 lbs/in) ---
 with tab2:
-    st.subheader("Core Resin Tanks (2 Units)")
+    st.subheader("Core Resin Tanks (2 Units - 228\" Height)")
     cols = st.columns(2)
     for i in range(1, 3):
         with cols[i - 1]:
@@ -97,7 +87,8 @@ with tab2:
                 label_visibility="visible",
             )
             percentages[f"Core Tank {i}"] = p
-            wt = (p / 100.0) * default_core_cap * default_core_dens
+            inches_filled = (p / 100.0) * 228
+            wt = inches_filled * 1000  # Corrected multiplier
             weights[f"Core Tank {i}"] = wt
             render_tank_card(f"Tank C{i}", p, wt, color="#f1c40f")
 
@@ -136,9 +127,7 @@ with tab4:
             percentages[f"Wax Tank {i}"] = p
             wt = (p / 100.0) * default_wax_cap * default_wax_dens
             weights[f"Wax Tank {i}"] = wt
-            render_tank_v = render_tank_card(
-                f"Tank W{i}", p, wt, color="#9b59b6"
-            )
+            render_tank_card(f"Tank W{i}", p, wt, color="#9b59b6")
 
 # --- 5. SUMMARY ---
 with tab5:
