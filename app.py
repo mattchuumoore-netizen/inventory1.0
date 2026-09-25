@@ -12,14 +12,7 @@ st.markdown(
 # Sidebar for global configurations
 st.sidebar.header("⚙️ Default Settings")
 st.sidebar.markdown(
-    "**Face Resin:** 216 in height | 496 lbs/in\n\n**Core Resin:** 228 in height | 1,000 lbs/in"
-)
-
-default_scav_cap = st.sidebar.number_input(
-    "Scavenger Tank Capacity (cu. ft)", value=2.0
-)
-default_scav_dens = st.sidebar.number_input(
-    "Scavenger Density (lbs/cu. ft)", value=45.0
+    "**Face Resin:** 216 in | 496 lbs/in\n\n**Core Resin:** 228 in | 1,000 lbs/in\n\n**Scavenger:** 228 in | 576 lbs/in"
 )
 
 default_wax_cap = st.sidebar.number_input("Wax Tank Capacity (cu. ft)", value=1.5)
@@ -52,7 +45,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(
 weights = {}
 percentages = {}
 
-# --- 1. FACE RESIN (Updated to 216" height @ 496 lbs/in) ---
+# --- 1. FACE RESIN (216" height @ 496 lbs/in) ---
 with tab1:
     st.subheader("Face Resin Tanks (4 Units - 216\" Height)")
     cols = st.columns(4)
@@ -92,9 +85,9 @@ with tab2:
             weights[f"Core Tank {i}"] = wt
             render_tank_card(f"Tank C{i}", p, wt, color="#f1c40f")
 
-# --- 3. SCAVENGER ---
+# --- 3. SCAVENGER (228" height @ 576 lbs/in) ---
 with tab3:
-    st.subheader("Scavenger Tank (1 Unit)")
+    st.subheader("Scavenger Tank (1 Unit - 228\" Height)")
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         p = st.number_input(
@@ -106,7 +99,8 @@ with tab3:
             label_visibility="visible",
         )
         percentages["Scavenger Tank 1"] = p
-        wt = (p / 100.0) * default_scav_cap * default_scav_dens
+        inches_filled = (p / 100.0) * 228
+        wt = inches_filled * 576
         weights["Scavenger Tank 1"] = wt
         render_tank_card("Scavenger S1", p, wt, color="#e67e22")
 
