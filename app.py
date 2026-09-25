@@ -9,18 +9,16 @@ st.markdown(
     "Adjust fill percentages to instantly view calculated weights and dynamic tank levels."
 )
 
-# Sidebar for global configurations
-st.sidebar.header("⚙️ Default Settings")
+# Sidebar for global configurations/summary reference
+st.sidebar.header("⚙️ System Specifications")
 st.sidebar.markdown(
-    "**Face Resin (4):** 216 in | 496 lbs/in\n\n**Core Resin (2):** 228 in | 1,000 lbs/in\n\n**Scavenger (1):** 228 in | 576 lbs/in\n\n**Wax 1 & 2:** 215 in | 259 lbs/in"
-)
-
-# Default fallback for Wax Tank 3 (cubic feet)
-default_wax_cap = st.sidebar.number_input(
-    "Wax Tank 3 Capacity (cu. ft)", value=1.5
-)
-default_wax_dens = st.sidebar.number_input(
-    "Wax Tank 3 Density (lbs/cu. ft)", value=35.0
+    """
+**Face Resin (4):** 216 in | 496 lbs/in  
+**Core Resin (2):** 228 in | 1,000 lbs/in  
+**Scavenger (1):** 228 in | 576 lbs/in  
+**Wax 1 & 2:** 215 in | 259 lbs/in  
+**Wax 3:** 228 in | 389 lbs/in
+"""
 )
 
 
@@ -107,7 +105,7 @@ with tab3:
         weights["Scavenger Tank 1"] = wt
         render_tank_card("Scavenger S1", p, wt, color="#e67e22")
 
-# --- 4. WAX (Tanks 1 & 2: 215" @ 259 lbs/in; Tank 3: cu ft) ---
+# --- 4. WAX (Tanks 1 & 2: 215" @ 259 lbs/in; Tank 3: 228" @ 389 lbs/in) ---
 with tab4:
     st.subheader("Wax Tanks (3 Units)")
     cols = st.columns(3)
@@ -125,8 +123,9 @@ with tab4:
             if i in [1, 2]:
                 inches_filled = (p / 100.0) * 215
                 wt = inches_filled * 259
-            else:
-                wt = (p / 100.0) * default_wax_cap * default_wax_dens
+            else:  # Wax Tank 3
+                inches_filled = (p / 100.0) * 228
+                wt = inches_filled * 389
             weights[f"Wax Tank {i}"] = wt
             render_tank_card(f"Tank W{i}", p, wt, color="#9b59b6")
 
